@@ -1,0 +1,10 @@
+name: "Form Interaction"
+description: "Complete forms with validation and error handling"
+url: "https://demo-form.com"
+goal: "Fill out contact form and handle validation errors"
+constraints:
+  - "Use only form filling tools"
+  - "Do not use javascript injection"
+oracle:
+  - "Form submitted successfully"
+  - "Errors handled gracefully"

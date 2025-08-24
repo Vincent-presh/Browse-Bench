@@ -1,0 +1,5 @@
+PyYAML
+playwright
+openai
+anthropic
+google-generativeai

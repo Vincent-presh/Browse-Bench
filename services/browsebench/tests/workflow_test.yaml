@@ -1,0 +1,10 @@
+name: "Multi-Step Workflows"
+description: "Execute complex, multi-page tasks"
+url: "https://demo-workflow.com"
+goal: "Search for a product, add to cart, and proceed to checkout"
+constraints:
+  - "Complete all steps in the correct order"
+oracle:
+  - "Product found"
+  - "Product added to cart"
+  - "Checkout page reached"

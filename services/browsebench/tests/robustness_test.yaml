@@ -1,0 +1,9 @@
+name: "Robustness Testing"
+description: "Handle dynamic content, popups, and errors"
+url: "https://demo-robustness.com"
+goal: "Navigate through site with popup ads and dynamic loading"
+constraints:
+  - "Handle popups"
+  - "Wait for dynamic content to load"
+oracle:
+  - "Task completed despite interruptions"

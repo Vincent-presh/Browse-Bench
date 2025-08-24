@@ -1,0 +1,12 @@
+name: "Navigation & Discovery"
+description: "Find product information across multiple pages"
+url: "https://demo-ecommerce.com"
+goal: "Extract product name, price, and availability from search results"
+constraints:
+  - "Use only navigation tools"
+  - "Don't click on ads"
+  - "Handle pagination if needed"
+oracle:
+  - "Product name found"
+  - "Price extracted correctly"
+  - "Availability status determined"
