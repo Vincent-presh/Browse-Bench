@@ -2,7 +2,7 @@
 
 [![License: MIT](images/banner.jpeg)](https://opensource.org/licenses/MIT)
 
-BrowseBench is an open-source benchmark for evaluating AI agents on web browsing and automation tasks. As AI models become more capable, understanding their ability to interact with the web in realistic ways is crucial. BrowseBench provides a framework for measuring these capabilities, helping developers and researchers build more robust AI agents.
+BrowseBench is an open-source benchmark for evaluating AI agents on web browsing, automation tasks and understanding their ability to interact with the web in realistic ways. BrowseBench provides a framework for measuring these capabilities, helping developers and researchers build more robust AI agents.
 
 ## Overview
 
