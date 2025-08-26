@@ -3,3 +3,5 @@ playwright
 openai
 anthropic
 google-generativeai
+fastapi
+uvicorn

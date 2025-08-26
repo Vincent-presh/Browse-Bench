@@ -1,5 +1,5 @@
 # services/browsebench/metrics.py
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import List, Dict, Any
 
 @dataclass
@@ -12,6 +12,9 @@ class TestResult:
     cost: float
     details: Dict[str, Any] = field(default_factory=dict)
 
+    def dict(self):
+        return asdict(self)
+
 @dataclass
 class BenchmarkResults:
     total_tests: int
@@ -22,6 +25,9 @@ class BenchmarkResults:
     total_token_usage: int
     total_cost: float
     results: List[TestResult] = field(default_factory=list)
+
+    def dict(self):
+        return asdict(self)
 
 class MetricsCollector:
     def __init__(self):

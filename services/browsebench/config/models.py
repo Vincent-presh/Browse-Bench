@@ -9,17 +9,22 @@ class ModelConfig:
 MODEL_CONFIGS = {
     "gpt-4": {
         "provider": "openai",
-        "model": "gpt-4",
-        "max_tokens": 2000
+        "model": "openai/gpt-4",
+        "max_tokens": 4096
     },
-    "claude-3": {
+    "claude-3-opus": {
         "provider": "anthropic",
-        "model": "claude-3-opus",
-        "max_tokens": 2000
+        "model": "anthropic/claude-3-opus",
+        "max_tokens": 4096
     },
-    "gemini": {
+    "gemini-flash": {
         "provider": "google",
-        "model": "gemini-2.0-flash",
-        "max_tokens": 2000
+        "model": "google/gemini-flash-1.5",
+        "max_tokens": 8192
+    },
+    "gemini-pro": {
+        "provider": "google",
+        "model": "google/gemini-pro",
+        "max_tokens": 8192
     }
 }

@@ -1,0 +1,15 @@
+body {
+    font-family: sans-serif;
+    margin: 2em;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+.chart-container {
+    width: 80%;
+    max-width: 800px;
+    margin: 2em auto;
+}
