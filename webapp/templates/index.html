@@ -3,21 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrowseBench Results</title>
+    <title>BrowseBench</title>
     <link rel="stylesheet" href="/static/css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h1>BrowseBench Results</h1>
-    <div class="chart-container">
-        <canvas id="completionRateChart"></canvas>
+    <h1>BrowseBench</h1>
+
+    <div id="run-benchmark">
+        <h2>Run Benchmark</h2>
+        <form id="benchmark-form">
+            <div class="form-group">
+                <label for="models">Select Models:</label>
+                <select id="models" name="models" multiple required></select>
+            </div>
+            <div class="form-group">
+                <label for="tests">Select Test:</label>
+                <select id="tests" name="tests" required></select>
+            </div>
+            <button type="submit">Run Benchmark</button>
+        </form>
     </div>
-    <div class="chart-container">
-        <canvas id="responseTimeChart"></canvas>
+
+    <div id="results">
+        <h2>Benchmark Results</h2>
+        <div id="results-table"></div>
     </div>
-    <div class="chart-container">
-        <canvas id="tokenUsageChart"></canvas>
+
+    <div class="charts">
+        <div class="chart-container">
+            <canvas id="completionRateChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="responseTimeChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="tokenUsageChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="costChart"></canvas>
+        </div>
     </div>
+
     <script src="/static/js/main.js"></script>
 </body>
 </html>

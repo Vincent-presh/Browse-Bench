@@ -75,17 +75,55 @@ pip install -r requirements.txt
 .venv/bin/playwright install
 ```
 
-4. Set up your API key:
+4. Configure your models:
+
+   Copy the example model configuration file:
+
+   ```bash
+   cp services/browsebench/config/model_configs.json.example services/browsebench/config/model_configs.json
+   ```
+
+   Then, edit `services/browsebench/config/model_configs.json` to add your API keys and desired models. See the [Configuration](#configuration) section for more details.
+
+5. Start the web app:
 
 ```bash
-export OPENROUTER_API_KEY="your-openrouter-api-key"
+.venv/bin/uvicorn webapp.main:app --host 0.0.0.0 --port 8000
 ```
 
-5. Run the benchmark:
+   You can now access the web app at [http://localhost:8000](http://localhost:8000).
+
+## Web App
+
+The web app provides an easy-to-use interface for running benchmarks and viewing results.
+
+- **Run Benchmarks:** Select one or more models and a test file from the dropdown menus, then click "Run Benchmark".
+- **View Results:** The results are displayed in a table and visualized in charts, allowing you to compare the performance of different models.
+- **Real-time Updates:** The results table and charts update automatically as benchmarks are running.
+
+## Command-Line Interface
+
+You can also run the benchmark from the command line:
 
 ```bash
-.venv/bin/python -m services.browsebench.runner --model gpt-4
+.venv/bin/python -m services.browsebench.runner --models <model_name_1> <model_name_2> --test_file <path_to_test_file>
 ```
+
+- `--models`: A space-separated list of models to use for the benchmark. These models must be defined in `services/browsebench/config/model_configs.json`.
+- `--test_file`: The path to a single test YAML file to run.
+- `--test_dir`: The directory containing test YAML files to run.
+
+## Configuration
+
+The `services/browsebench/config/model_configs.json` file contains the configurations for the models you want to use. You can add, remove, or modify the models in this file.
+
+Each model configuration is an object with the following properties:
+
+- `model`: The name of the model to use (e.g., `google/gemini-flash-1.5`).
+- `api_key`: Your API key for the model provider. You can also set the `OPENROUTER_API_KEY` environment variable.
+- `base_url`: The base URL for the model provider's API. If not specified, it defaults to `https://openrouter.ai/api/v1`.
+
+
 
 ## Contributing
 

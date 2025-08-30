@@ -1,30 +1,17 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+import json
+import os
+from typing import Optional
 
 @dataclass
 class ModelConfig:
-    provider: str
     model: str
-    max_tokens: int
+    api_key: Optional[str] = None
+    base_url: Optional[str] = None
 
-MODEL_CONFIGS = {
-    "gpt-4": {
-        "provider": "openai",
-        "model": "openai/gpt-4",
-        "max_tokens": 4096
-    },
-    "claude-3-opus": {
-        "provider": "anthropic",
-        "model": "anthropic/claude-3-opus",
-        "max_tokens": 4096
-    },
-    "gemini-flash": {
-        "provider": "google",
-        "model": "google/gemini-flash-1.5",
-        "max_tokens": 8192
-    },
-    "gemini-pro": {
-        "provider": "google",
-        "model": "google/gemini-pro",
-        "max_tokens": 8192
-    }
-}
+def load_model_configs():
+    config_path = os.path.join(os.path.dirname(__file__), 'model_configs.json')
+    with open(config_path, 'r') as f:
+        return json.load(f)
+
+MODEL_CONFIGS = load_model_configs()

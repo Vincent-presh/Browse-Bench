@@ -30,19 +30,21 @@ class BrowseBenchRunner:
             await self.playwright.stop()
 
     def _setup_model(self, model_config: ModelConfig):
-        api_key = os.getenv("OPENROUTER_API_KEY")
+        api_key = model_config.api_key or os.getenv("OPENROUTER_API_KEY")
         if not api_key:
-            raise ValueError("OPENROUTER_API_KEY environment variable not set.")
+            raise ValueError("API key not found. Set it in model_configs.json or as an environment variable.")
         
+        base_url = model_config.base_url or "https://openrouter.ai/api/v1"
+
         return OpenAI(
-            base_url="https://openrouter.ai/api/v1",
+            base_url=base_url,
             api_key=api_key,
         )
 
     async def _execute_test(self, test: Test) -> TestResult:
         page = await self.browser.new_page()
         tools = BrowserAgentTools(page)
-        tool_definitions = get_tool_definitions()
+        tool_definitions = get_tool_definitions(tools)
 
         system_prompt = """
         You are a web browsing agent. You will be given a task and a set of tools to interact with a web page.
@@ -69,6 +71,7 @@ class BrowseBenchRunner:
         start_time = asyncio.get_event_loop().time()
         steps = 0
         total_tokens = 0
+        total_cost = 0
 
         for _ in range(10): # Max 10 steps
             steps += 1
@@ -84,6 +87,7 @@ class BrowseBenchRunner:
             )
             response_message = response.choices[0].message
             total_tokens += response.usage.total_tokens
+            total_cost += response.usage.cost
 
             if not response_message.tool_calls:
                 break
@@ -100,17 +104,11 @@ class BrowseBenchRunner:
                     steps=steps,
                     response_time=asyncio.get_event_loop().time() - start_time,
                     token_usage=total_tokens,
-                    cost=0, # Placeholder
+                    cost=total_cost,
                     details={"finish_reason": function_args.get("result")}
                 )
 
-            available_tools = {
-                "navigate": tools.navigate,
-                "click": tools.click,
-                "type_text": tools.type_text,
-                "get_text": tools.get_text,
-                "get_html": tools.get_html,
-            }
+            available_tools = {t['function']['name']: getattr(tools, t['function']['name']) for t in tool_definitions}
             tool_function = available_tools.get(function_name)
             
             if tool_function:
@@ -131,7 +129,7 @@ class BrowseBenchRunner:
             steps=steps,
             response_time=asyncio.get_event_loop().time() - start_time,
             token_usage=total_tokens,
-            cost=0,
+            cost=total_cost,
             details={"finish_reason": "Max steps reached."}
         )
 
@@ -149,7 +147,7 @@ if __name__ == '__main__':
     from .test_suite import load_test_from_yaml
 
     parser = argparse.ArgumentParser(description="BrowseBench Benchmark Runner")
-    parser.add_argument("--models", nargs='+', default=["gemini-flash"], help="Models to use for the benchmark")
+    parser.add_argument("--models", nargs='+', default=["google/gemini-flash-1.5"], help="Models to use for the benchmark")
     parser.add_argument("--test_dir", type=str, default="services/browsebench/tests", help="Directory containing test YAML files")
     parser.add_argument("--test_file", type=str, default=None, help="Path to a single test YAML file to run.")
     args = parser.parse_args()

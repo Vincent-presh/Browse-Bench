@@ -1,77 +1,55 @@
-# services/browsebench/openai_tools.py
+import inspect
+import json
+from .agent_tools import BrowserAgentTools
 
-def get_tool_definitions():
-    return [
-        {
-            "type": "function",
-            "function": {
-                "name": "navigate",
-                "description": "Navigates to a given URL.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "url": {"type": "string", "description": "The URL to navigate to."}
-                    },
-                    "required": ["url"],
+def get_tool_definitions(tools: BrowserAgentTools):
+    tool_definitions = []
+    for name, method in inspect.getmembers(tools, predicate=inspect.iscoroutinefunction):
+        if name.startswith("__"):
+            continue
+
+        sig = inspect.signature(method)
+        docstring = inspect.getdoc(method)
+        description = ""
+        if docstring:
+            description = docstring.split('\n')[0]
+
+        parameters = {
+            "type": "object",
+            "properties": {},
+            "required": [],
+        }
+
+        for param_name, param in sig.parameters.items():
+            if param_name == "self":
+                continue
+            
+            param_type = "string"
+            if param.annotation == int:
+                param_type = "integer"
+            elif param.annotation == float:
+                param_type = "number"
+            elif param.annotation == bool:
+                param_type = "boolean"
+
+            parameters["properties"][param_name] = {
+                "type": param_type,
+                "description": "",
+            }
+            if param.default == inspect.Parameter.empty:
+                parameters["required"].append(param_name)
+
+        tool_definitions.append(
+            {
+                "type": "function",
+                "function": {
+                    "name": name,
+                    "description": description,
+                    "parameters": parameters,
                 },
-            },
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "click",
-                "description": "Clicks on an element specified by a CSS selector.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "selector": {"type": "string", "description": "The CSS selector of the element to click."}
-                    },
-                    "required": ["selector"],
-                },
-            },
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "type_text",
-                "description": "Types text into an input field.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "selector": {"type": "string", "description": "The CSS selector of the input field."},
-                        "text": {"type": "string", "description": "The text to type."}
-                    },
-                    "required": ["selector", "text"],
-                },
-            },
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "get_text",
-                "description": "Gets the text content of an element.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "selector": {"type": "string", "description": "The CSS selector of the element."}
-                    },
-                    "required": ["selector"],
-                },
-            },
-        },
-        {
-            "type": "function",
-            "function": {
-                "name": "get_html",
-                "description": "Gets the HTML content of an element.",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "selector": {"type": "string", "description": "The CSS selector of the element. Defaults to 'body'."}
-                    },
-                },
-            },
-        },
+            }
+        )
+    tool_definitions.append(
         {
             "type": "function",
             "function": {
@@ -86,4 +64,6 @@ def get_tool_definitions():
                 },
             },
         },
-    ]
+    )
+    return tool_definitions
+

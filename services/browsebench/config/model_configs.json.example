@@ -1,0 +1,14 @@
+{
+  "google/gemini-flash-1.5": {
+    "model": "google/gemini-flash-1.5",
+    "api_key": "YOUR_API_KEY"
+  },
+  "openai/gpt-4o": {
+    "model": "openai/gpt-4o",
+    "api_key": "YOUR_API_KEY"
+  },
+  "anthropic/claude-3-haiku": {
+    "model": "anthropic/claude-3-haiku",
+    "api_key": "YOUR_API_KEY"
+  }
+}
